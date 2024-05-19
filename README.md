@@ -1,5 +1,5 @@
 # Basic-mzml-plotter
-A very basic mzml file plotting program that can plot single scans, merge all scans from a file, plot the TIC, and plot an EIC of a chosen mass.
+A very basic mzml file plotting program that can plot single scans, merge all scans from a file, plot the TIC, and plot an EIC of a chosen m/z value.
 
 I developed this quickly for myself after needing a way to plot both thermo and waters MS files. I had a lot of MALDI-MS analyses with ~100 scans each with only one sample per file, and wanted to easily combine all the scans and plot them in a similar way regardless of the origin instrument (e.g I had access to masslynx, but not xcalibur).  
 
