@@ -8,6 +8,8 @@ I found that none of the popular free mzml analysis platforms (mzmine, openchrom
 # Requirements
 -PyQT6
 
+-pyuic6
+
 -pyOpenMS
 
 -matplotlib
