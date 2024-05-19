@@ -18,6 +18,14 @@ Download both the mzmlplot.py and mzmlplot_ui.py files into the same folder. To 
 
 # Usage
 
+-Single scan: Plots a single user defined scan
+
+-Combine scans: Merges all scans of a file (using pyOpenMS SpectraMerger)
+
+-Plot TIC: Extracts the total ion current
+
+-Plot EIC: Extracts the extracted ion current for a user defined m/z value
+
 For single scan plotting, combined scan plotting, and TIC plotting, profile or centroid data is fine (profile will generate a standard plot, centroid will generate a stem plot without markers). For EIC plotting, the data should be centroided for the peak finding algorithm to work properly.
 
 Select the mzml file you want to plot with the select file button. 
