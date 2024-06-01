@@ -12,6 +12,8 @@ I found that none of the popular free mzml analysis platforms (mzmine, openchrom
 
 -matplotlib
 
+-SciPy
+
 # Install
 
 Download both the mzmlplot.py and mzmlplot_ui.py files into the same folder. To run the program, run the mzmlplot.py file.
@@ -20,7 +22,9 @@ Download both the mzmlplot.py and mzmlplot_ui.py files into the same folder. To 
 
 -Single scan: Plots a single user defined scan
 
--Combine scans: Merges all scans of a file (using pyOpenMS SpectraMerger)
+-Combine scans (MS1): Merges all MS1 scans
+
+-Combine scans (MS2): Merges all MS2 scans
 
 -Plot TIC: Extracts the total ion current
 
@@ -34,7 +38,7 @@ If you want to only plot a single scan, define the scan in the scan number box (
 
 For EIC plotting, input the target m/z value in the m/z value box (higher m/z accuracy is better for the algorithm).
 
-The plot settings options should hopefully be self explanatory!
+The plot settings and annotation options should hopefully be self explanatory!
 
 When you click 'plot', this will open up the plotted mzml file in a standard matplotlib plot window where the plot can be manipulated at will, and saved in various file formats (I recommend SVG).
 
