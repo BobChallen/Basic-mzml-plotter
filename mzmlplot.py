@@ -11,11 +11,12 @@ import matplotlib.ticker as ticker
 import pandas as pd
 from mzmlplotter_ui_v110 import Ui_MainWindow
 from scipy.signal import find_peaks
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow): #setup GUI window
     def __init__ (self):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        #connect buttons to functions
         self.ui.fileselectButton.clicked.connect(self.file_finder)
         self.ui.plotButton.clicked.connect(self.plot)
         self.show()
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
 
         if selected_file_path:
             self.ui.fileLineedit.setText(selected_file_path)
-    def plot(self):
+    def plot(self): #connect mode select dropdown menu to each plotting mode
         modeboxindex = self.ui.modeBox.currentIndex()
         if modeboxindex == 0:
             self.plotsinglescan()
@@ -46,7 +47,8 @@ class MainWindow(QMainWindow):
             self.plottic()
         elif modeboxindex == 4:
             self.ploteic()
-    def update_annotations(self, ax, peaks_df):
+    def update_annotations(self, ax, peaks_df): #function to dynamically add annotations depending on zoom level
+        #get current xy range from plot
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
 
@@ -55,7 +57,7 @@ class MainWindow(QMainWindow):
             if isinstance(artist, plt.Annotation):
                 artist.remove()
 
-        # Filter the DataFrame based on the current view limits
+        # Filter the xy DataFrame based on the current view limits
         visible_peaks = peaks_df[(peaks_df['m/z'] >= xlim[0]) & (peaks_df['m/z'] <= xlim[1]) & (peaks_df['intensity'] >= ylim[0]) & (peaks_df['intensity'] <= ylim[1])]
 
 
@@ -63,7 +65,7 @@ class MainWindow(QMainWindow):
             # Calculate the maximum intensity in the current view
             max_intensity = visible_peaks['intensity'].max()
 
-            # Set the threshold percentage
+            # Set the annotation threshold
             threshold_percentage = self.ui.annothresh_Spinbox.value()/100
             threshold_value = max_intensity * threshold_percentage
 
@@ -76,13 +78,13 @@ class MainWindow(QMainWindow):
             for i, row in top_filtered_peaks.iterrows():
                 ax.annotate(f'{row["m/z"]:.5f}', xy=(row['m/z'], row['intensity']),
                             xytext=(10, 10), textcoords='offset points', fontsize=8, color='red', arrowprops=dict(facecolor='black', arrowstyle='-|>'))
-    def plotsinglescan(self):
+    def plotsinglescan(self): #choose a single scan from the mzml to plot
         file = self.ui.fileLineedit.text()
         #create an MSExperiment object to load the mzml file into
         inp = oms.MSExperiment()
         oms.MzMLFile().load(file, inp)
 
-        #In the square brackets, type the scan number you want to view
+        #grabs target scan number from GUI
         scan = [self.ui.scannumberSpinbox.value()]
 
         #Create a new MSExperiment object to extract the scan to
@@ -93,7 +95,7 @@ class MainWindow(QMainWindow):
             if k in scan:
                 filtered.addSpectrum(s)
 
-        #Set up the plot window - not too important as it can be resized at will when open
+        #Set up the initial plot window
         fig, axs = plt.subplots(1)
         fig.set_figheight(4)
         plt.subplots_adjust(hspace=1)
@@ -101,18 +103,18 @@ class MainWindow(QMainWindow):
         #setup the axis params for the figure
         s = filtered[0]
 
-        #If you are using profile data, keep this as 'axs.plot'. If using centroid, change to 'axs.stem' and delete ', linewidth = x'
-        #You can change the line colour here by changing the colour name in " ", and also change the line thickness
+        #selects a line plot or stem plot (with no markers) depending on user selection of profile or centroid data
+        #line width and line colour taken from user GUI inputs
         if self.ui.profileButton.isChecked():
             axs.plot(s.get_peaks()[0],s.get_peaks()[1], self.ui.colourBox.currentText(), linewidth = self.ui.widthBox.value())
         elif self.ui.centroidButton.isChecked():
             markerline, stemlines, baseline = axs.stem(s.get_peaks()[0],s.get_peaks()[1], self.ui.colourBox.currentText(), markerfmt='none')
             plt.setp(stemlines, 'linewidth', self.ui.widthBox.value())
 
-        #set the y-axis upper and lower limits - accepts raw integers or scientific notation
+        #Gets the y-axis upper and lower limits from the GUI
         axs.set_ylim(self.ui.lowySpinbox.value(), self.ui.highySpinbox.value())
 
-        #Set the x-axis upper and lower limit - accepts raw integers or scientific notation
+        #Get the x-axis upper and lower limits from the GUI
         axs.set_xlim(self.ui.lowxSpinbox.value(), self.ui.highxSpinbox.value())
 
         #Sets the x/y-axis labels
@@ -203,7 +205,7 @@ class MainWindow(QMainWindow):
             # Sets the figure to a tight layout
             fig.tight_layout()
 
-            if self.ui.anno_Checkbox.isChecked():
+            if self.ui.anno_Checkbox.isChecked():  #add annotations
                 self.update_annotations(axs, peaks_df)
                 print('hello')
                 # Connect the update function to the 'xlim_changed' and 'ylim_changed' events
