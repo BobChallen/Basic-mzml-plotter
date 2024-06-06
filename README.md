@@ -6,6 +6,10 @@ I developed this quickly for myself after needing a way to plot both thermo and 
 I found that none of the popular free mzml analysis platforms (mzmine, openchrom, seeMS, etc.) could just merge all the scans of a file (at least not in a user friendly way that I could find), and instead forced you to look at only individual scans. This might be only useful for me but hopefully others can find it helpful!
 
 # Requirements
+-Confirmed working with python 3.10 and 3.11
+
+To install the requirements, open a command prompt window (windows key + R, type cmd.exe and press enter) and type 'pip install' followed by the package names below, seperated by spaces.
+
 -PyQT6
 
 -pyOpenMS
